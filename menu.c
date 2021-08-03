@@ -38,12 +38,12 @@ int Select(item _menu[], int Pointer, int menu_size){
     
 }
 
-item *Menu_maker(char *buffer[],int *action,int size){
-    item *tmp_menu;
-    tmp_menu = (item*)malloc(size * sizeof(item));
+item *Menu_maker(char *buffer[],int *action,int size,item *target){
+    // item *tmp_menu;
+    target = (item*)malloc(size * sizeof(item));
     for(int i=0; i<size;i++){
-        strcpy ((char*)tmp_menu[i].item_name, buffer[i]);
-        tmp_menu[i].action    =  action[i];
+        strcpy ((char*)target[i].item_name, buffer[i]);
+        target[i].action    =  action[i];
     }
-    return tmp_menu;
+    return target;
 }

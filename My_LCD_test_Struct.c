@@ -29,18 +29,21 @@ int main(void){ //Super loop
     // Various menus in the form of lists
     char *main_menu[] = {"milk sink","meat sink","RGB's"};
     int main_menu_size = sizeof(main_menu) / sizeof(main_menu[0]);
+    item menuBuff[main_menu_size];
     int main_menu_actions[] = {0,1,2};
-    item *_main_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size);
+    item *_main_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size,menuBuff);
 
     char *sink_menu[] = {"on","off","dim","back"};
     int sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
+    item sinkBuff[sink_size];
     int sink_actions[] = {3,4,5,9};
-    item *_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size);
+    item *_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
     char *RGB_menu[] = {"on","off","dim","red","green","blue","back"};
     int RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
+    item RGBBuff[RGB_size];
     int RGB_actions[] = {3,4,5,6,7,8,9}; 
-    item *_RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size);
+    item *_RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
     
    
    
@@ -53,22 +56,22 @@ int main(void){ //Super loop
 
 
     //Initialization of the screen and main program
-    lcd_init(LCD_DISP_ON_CURSOR_BLINK);
+    lcd_init(LCD_DISP_ON);
     lcd_clrscr();
     lcd_home();
-    lcd_puts("Kithcen proj\n");
-    lcd_puts("V1.3.3");
+    lcd_puts("Light controller\n");
+    lcd_puts("V2.0");
     _delay_ms(500);
     lcd_clrscr();
     lcd_home();
-    lcd_puts("hello how can");
+    lcd_puts("hello there! how can");
     lcd_puts("\n");
     lcd_puts("i help you?");
     _delay_ms(500 );
 
    
 
-    current_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size);
+    current_menu = _main_menu;
     current_menu_size = main_menu_size;
     Show(current_menu, pointer,current_menu_size);
     
@@ -94,7 +97,7 @@ int main(void){ //Super loop
                     lcd_home();
                     lcd_puts("milky sink");
                     _delay_ms(700);
-                    current_menu = Menu_maker(sink_menu,sink_actions,sink_size);
+                    current_menu = _sink_menu;
                     current_menu_size = sink_size;
                     Show(current_menu, pointer,current_menu_size);
                     break;
@@ -102,7 +105,7 @@ int main(void){ //Super loop
                     lcd_home();
                     lcd_puts("meaty sink");
                     _delay_ms(700);
-                    current_menu = Menu_maker(sink_menu,sink_actions,sink_size);
+                    current_menu = _sink_menu;
                     current_menu_size = sink_size;
                     Show(current_menu, pointer,current_menu_size);
                     break;
@@ -110,7 +113,7 @@ int main(void){ //Super loop
                     lcd_home();
                     lcd_puts("RGB's");
                     _delay_ms(700);
-                    current_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size);
+                    current_menu = _RGB_menu;
                     current_menu_size = RGB_size;
                     Show(current_menu, pointer,current_menu_size);
                     break;
@@ -130,7 +133,7 @@ int main(void){ //Super loop
                     lcd_home();
                     lcd_puts("Going back");
                     _delay_ms(700);
-                    current_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size);
+                    current_menu = _main_menu;
                     current_menu_size = main_menu_size;
                     Show(current_menu, pointer,current_menu_size);
                 default:

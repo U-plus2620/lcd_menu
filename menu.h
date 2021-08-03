@@ -15,7 +15,7 @@
         int action;
     }item;
     
-item *Menu_maker(char *buffer[],int *action,int size);
+item *Menu_maker(char *buffer[],int *action,int size, item *target);
 char *_Item(item _menu[], int pointer);
 void Show(item _menu[], int Pointer, int menu_size);
 int Scroll(int up, int down, int Pointer);
