@@ -39,7 +39,7 @@ int main(void){ //Super loop
     int sink_actions[] = {3,4,5,9};
     item *_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
-    char *RGB_menu[] = {"on","off","dim","red","green","blue","back"};
+    char *RGB_menu[] = {"on","off","dim","red","grn","blu","back"};
     int RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
     item RGBBuff[RGB_size];
     int RGB_actions[] = {3,4,5,6,7,8,9}; 
