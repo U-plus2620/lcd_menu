@@ -36,19 +36,19 @@ int main(void){ //Super loop
     char *sink_menu[] = {"on","off","dim","back"};
     int sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
     item sinkBuff[sink_size];
-    int sink_actions[] = {3,4,5,9};
+    int sink_actions[] = {3,4,5,10};
     item *_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
-    char *RGB_menu[] = {"on","off","dim","red","grn","blu","back"};
+    char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
     int RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
     item RGBBuff[RGB_size];
-    int RGB_actions[] = {3,4,5,6,7,8,9}; 
+    int RGB_actions[] = {3,4,5,6,7,8,9,10}; 
     item *_RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
     
    
    
 
-    enum selection{milk,meat,RGB,on,off,dim,red,green,blue,back}selection;
+    enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
 
     int pointer = 0;
     item *current_menu;
