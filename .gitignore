@@ -1,0 +1,9 @@
+*.bck
+*.o
+*.map
+*.hex
+*.elf
+*.txt
+*.ini
+.pio/
+.vscode/
