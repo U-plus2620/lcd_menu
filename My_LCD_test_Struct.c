@@ -60,7 +60,7 @@ int main(void){ //Super loop
     lcd_clrscr();
     lcd_home();
     lcd_puts("Light controller\n");
-    lcd_puts("V2.0");
+    lcd_puts("V2.1");
     _delay_ms(500);
     lcd_clrscr();
     lcd_home();
