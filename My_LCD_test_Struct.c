@@ -50,7 +50,7 @@ int main(void){ //Super loop
 
     enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
 
-    int pointer = 0;
+    uint8_t pointer = 0;
     item *current_menu;
     int current_menu_size;
 

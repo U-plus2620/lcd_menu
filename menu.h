@@ -10,8 +10,10 @@
    # an enum containing diferrent selection names is used in conjunction with the switch-case to make a decision.              #  
     ########################################################################################################################### 
  */
+#define MAX_NAME_SIZE 16
+
  typedef struct _Item{
-        char *item_name;
+        char item_name[MAX_NAME_SIZE];
         int action;
     }item;
     
