@@ -15,6 +15,7 @@
  typedef struct _Item{
         char item_name[MAX_NAME_SIZE];
         int action;
+        //int output;
     }item;
     
 item *Menu_maker(char *buffer[],int *action,int size, item *target);

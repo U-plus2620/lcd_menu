@@ -34,8 +34,7 @@ int Scroll(int up, int down, int Pointer){
 int Select(item _menu[], int Pointer, int menu_size){
     //This function returns an interger that could be used to make a decision based on an item in the
     //context of a menu (i.e. when an item is selected using perhaps a select button.)
-    return _menu[Pointer%(menu_size)].action;
-    
+    return _menu[Pointer%(menu_size)].action;   
 }
 
 item *Menu_maker(char *buffer[],int *action,int size,item *target){

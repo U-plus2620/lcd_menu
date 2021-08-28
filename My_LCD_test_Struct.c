@@ -7,6 +7,11 @@
 #include "lcd.h"
 #include "menu.h"
 
+#define MILK   PD5
+#define MEAT   PD6
+#define UP     PD2 
+#define DOWN   PD3
+#define SELECT PD4
 
 int DeBounce(int Pin_reg, int Pin){
     if(bit_is_clear(Pin_reg,Pin)) _delay_ms(BOUNCE);
@@ -17,12 +22,12 @@ int DeBounce(int Pin_reg, int Pin){
 int main(void){ //Super loop
     
     //Pin configurations
-    DDRD  &= ~(1 << PD2) | ~(1<<PD3) | ~(1<<PD4);        /* Pin PD2 input              */
-    PORTD |=  (1 << PD2);        /* Pin PD2 pull-up enabled    */
-    PORTD |=  (1 << PD3);        /* Pin PD3 pull-up enabled    */
-    PORTD |=  (1 << PD4);        /* Pin PD4 pull-up enabled    */
-    DDRB  |=  (1<<PB7);    /* Pin connected to LED backlight*/
-    PORTB &= ~(1<<PB7);
+    DDRD  &= ~(1 << UP) | ~(1<<DOWN) | ~(1<<SELECT);        /* Pin PD2 input              */
+    PORTD |=  (1 << UP);          /* Pin PD2 pull-up enabled    */
+    PORTD |=  (1 << DOWN);          /* Pin PD3 pull-up enabled    */
+    PORTD |=  (1 << SELECT);          /* Pin PD4 pull-up enabled    */
+    DDRD  |=  (1<<MILK) | (1<<MEAT); /*output pin*/   
+    PORTD &= ~(1<<MILK) | ~(1<<MEAT);/*output pin*/
 
    
     
@@ -37,7 +42,8 @@ int main(void){ //Super loop
     int sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
     item sinkBuff[sink_size];
     int sink_actions[] = {3,4,5,10};
-    item *_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
+    item *milky_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
+    item *meaty_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
     char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
     int RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
@@ -76,28 +82,23 @@ int main(void){ //Super loop
     Show(current_menu, pointer,current_menu_size);
     
     while(1){
-        if (DeBounce(PIND,PD2)){ //Scroll up
-        //    PORTB |= (1<<PB7);
+        if (DeBounce(PIND,UP)){ //Scroll up
             pointer = Scroll(1,0,pointer);
             Show(current_menu,pointer,current_menu_size);
         }
-        else if (DeBounce(PIND,PD3)){ //Scroll down
-            //PORTB &= ~(1<<PB7);         
+        else if (DeBounce(PIND,DOWN)){ //Scroll down
             pointer = Scroll(0,1,pointer);
             Show(current_menu,pointer,current_menu_size);
         }
-        else if (DeBounce(PIND,PD4)){ //Select item
-        lcd_home();
-        lcd_puts("item selected");
-        _delay_ms(500);
-        lcd_clrscr();
+        else if (DeBounce(PIND,SELECT)){ //Select item
+      
         selection = Select(current_menu,pointer,current_menu_size);
            switch(selection){
                 case milk:
                     lcd_home();
                     lcd_puts("milky sink");
                     _delay_ms(700);
-                    current_menu = _sink_menu;
+                    current_menu = milky_sink_menu;
                     current_menu_size = sink_size;
                     Show(current_menu, pointer,current_menu_size);
                     break;
@@ -105,7 +106,7 @@ int main(void){ //Super loop
                     lcd_home();
                     lcd_puts("meaty sink");
                     _delay_ms(700);
-                    current_menu = _sink_menu;
+                    current_menu = meaty_sink_menu;
                     current_menu_size = sink_size;
                     Show(current_menu, pointer,current_menu_size);
                     break;
@@ -118,8 +119,22 @@ int main(void){ //Super loop
                     Show(current_menu, pointer,current_menu_size);
                     break;
                 case on:
+                    if(current_menu == milky_sink_menu){
+                        PORTD |= (1<<MILK);
+                    }
+                    else if (current_menu == meaty_sink_menu){
+                   
+                        PORTD |= (1<<MEAT);
+                    }
                     break;
                 case off:
+                     if(current_menu == milky_sink_menu){
+                        PORTD &= ~(1<<MILK);
+                    }
+                    else if (current_menu == meaty_sink_menu){
+                   
+                        PORTD &= ~(1<<MEAT);
+                    }
                     break;
                 case dim:
                     break;
@@ -130,9 +145,6 @@ int main(void){ //Super loop
                 case blue:
                     break;
                 case back:
-                    lcd_home();
-                    lcd_puts("Going back");
-                    _delay_ms(700);
                     current_menu = _main_menu;
                     current_menu_size = main_menu_size;
                     Show(current_menu, pointer,current_menu_size);
