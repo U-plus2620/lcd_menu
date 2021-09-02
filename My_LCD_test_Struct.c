@@ -193,6 +193,7 @@ int main(void){ //Super loop
                     break;
                 case white:
                     lcd_puts("INOP");
+                    break;
                 case back:
                     current_menu = _main_menu;
                     current_menu_size = main_menu_size;
