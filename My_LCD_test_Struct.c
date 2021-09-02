@@ -183,16 +183,32 @@ int main(void){ //Super loop
                         Show(current_menu,pointer,current_menu_size);
                     break;
                 case red:
+                    lcd_clrscr();
+                    lcd_home();
                     lcd_puts("INOP");
+                    _delay_ms(100);
+                    Show(current_menu,pointer,current_menu_size);
                     break;
                 case green:
+                    lcd_clrscr();
+                    lcd_home();
                     lcd_puts("INOP");
+                    _delay_ms(3000);
+                    Show(current_menu,pointer,current_menu_size);
                     break;
                 case blue:
+                    lcd_clrscr();
+                    lcd_home();
                     lcd_puts("INOP");
+                    _delay_ms(3000);
+                    Show(current_menu,pointer,current_menu_size);
                     break;
                 case white:
+                    lcd_clrscr();
+                    lcd_home();
                     lcd_puts("INOP");
+                    _delay_ms(3000);
+                    Show(current_menu,pointer,current_menu_size);
                     break;
                 case back:
                     current_menu = _main_menu;
