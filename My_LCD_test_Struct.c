@@ -20,11 +20,8 @@ int DeBounce(int Pin_reg, int Pin){
     else return 0;
 }
 
-volatile uint8_t *dim_reg;
-uint8_t dimmer  = 0;
-void Dimmer(uint8_t dimmer,volatile uint8_t *dim_reg);
-
 uint8_t pointer = 0;
+uint8_t dimmer  = 0;
 item *current_menu;
 int current_menu_size;
 enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
