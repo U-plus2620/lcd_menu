@@ -19,11 +19,10 @@ int DeBounce(int Pin_reg, int Pin){
     if(bit_is_clear(Pin_reg,Pin)) return 1;
     else return 0;
 }
-
-uint8_t pointer = 0;
-uint8_t dimmer  = 0;
-item *current_menu;
-int current_menu_size;
+volatile uint8_t pointer = 0;
+volatile uint8_t dimmer  = 0;
+volatile item *current_menu;
+volatile int current_menu_size;
 enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
 
 // Various menus in the form of lists
@@ -59,9 +58,8 @@ ISR (PCINT2_vect){
             Show(current_menu,pointer,current_menu_size);
         }
         else if (DeBounce(PIND,SELECT)){ //Select item
-      
-        selection = Select(current_menu,pointer,current_menu_size);
-           switch(selection){
+            selection = Select(current_menu,pointer,current_menu_size);
+            switch(selection){
                 case milk:
                     lcd_clrscr();
                     lcd_home();
@@ -244,139 +242,6 @@ int main(void){ //Super loop
     Show(current_menu, pointer,current_menu_size);
 
     while(1){
-        // if (DeBounce(PIND,UP)){ //Scroll up
-        //     pointer = Scroll(1,0,pointer);
-        //     Show(current_menu,pointer,current_menu_size);
-        // }
-        // else if (DeBounce(PIND,DOWN)){ //Scroll down
-        //     pointer = Scroll(0,1,pointer);
-        //     Show(current_menu,pointer,current_menu_size);
-        // }
-        // else if (DeBounce(PIND,SELECT)){ //Select item
-      
-        // selection = Select(current_menu,pointer,current_menu_size);
-        //    switch(selection){
-        //         case milk:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             _delay_ms(100);
-        //             current_menu = milky_sink_menu;
-        //             current_menu_size = sink_size;
-        //             Show(current_menu, pointer,current_menu_size);
-        //             break;
-        //         case meat:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             _delay_ms(100);
-        //             current_menu = meaty_sink_menu;
-        //             current_menu_size = sink_size;
-        //             Show(current_menu, pointer,current_menu_size);
-        //             break;
-        //         case RGB:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             _delay_ms(100);
-        //             current_menu = _RGB_menu;
-        //             current_menu_size = RGB_size;
-        //             Show(current_menu, pointer,current_menu_size);
-        //             break;
-        //         case on:
-        //             if(current_menu == milky_sink_menu){
-        //                 TCCR0A |= (1<<COM0B1);
-        //                 OCR0B = 0xFF;
-        //             }
-        //             else if (current_menu == meaty_sink_menu){
-        //                 TCCR0A |= (1<<COM0A1);
-        //                 OCR0A = 0xFF;
-        //             }
-        //             // else if (current_menu == _RGB_menu){
-        //             //      send on signal
-        //             // }
-        //             break;
-        //         case off:
-        //              if(current_menu == milky_sink_menu){
-        //                 TCCR0A &= ~(1<<COM0B1);
-        //                 PORTD &= ~(1<< MILK);
-        //             }
-        //             else if (current_menu == meaty_sink_menu){
-        //                TCCR0A &= ~(1<<COM0A1);
-        //                PORTD &= ~(1<< MEAT);
-        //             }
-        //              // else if (current_menu == _RGB_menu){
-        //             //      send off signal
-        //             // }
-        //             break;
-        //         case dim:
-        //                 lcd_clrscr();
-        //                 char intbuff[10];
-        //                 itoa((dimmer/(float)0)*100,intbuff,10);
-        //                 lcd_puts("DIM\n");
-        //                 lcd_puts(intbuff);
-        //                 lcd_putc('%');
-        //                 do{
-        //                     if(DeBounce(PIND,UP)){
-        //                         dimmer += (dimmer!=255) ? 51 : 1; 
-        //                         itoa((dimmer/(float)255)*100,intbuff,10);
-        //                         lcd_clrscr();
-        //                         lcd_puts("DIM\n");
-        //                         lcd_puts(intbuff);
-        //                         lcd_putc('%');
-        //                         }
-        //                     else if (DeBounce(PIND,DOWN)){
-        //                         dimmer -= (dimmer!=0) ? 51 : 1; 
-        //                         itoa((dimmer/(float)255)*100,intbuff,10);
-        //                         lcd_clrscr();
-        //                         lcd_puts("DIM\n");
-        //                         lcd_puts(intbuff);
-        //                         lcd_putc('%');
-        //                         }
-        //                     if(current_menu == milky_sink_menu){
-        //                         OCR0B = dimmer;
-        //                         }
-        //                     else if (current_menu == meaty_sink_menu){
-        //                         OCR0A = dimmer;
-        //                         }
-        //                      // else if (current_menu == _RGB_menu){
-        //                      //      send dim signal
-        //                      // }
-        //                 }while (!DeBounce(PIND, SELECT));
-        //                 Show(current_menu,pointer,current_menu_size);
-        //             break;
-        //         case red:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             lcd_puts("INOP");
-        //             _delay_ms(100);
-        //             Show(current_menu,pointer,current_menu_size);
-        //             break;
-        //         case green:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             lcd_puts("INOP");
-        //             _delay_ms(3000);
-        //             Show(current_menu,pointer,current_menu_size);
-        //             break;
-        //         case blue:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             lcd_puts("INOP");
-        //             _delay_ms(3000);
-        //             Show(current_menu,pointer,current_menu_size);
-        //             break;
-        //         case white:
-        //             lcd_clrscr();
-        //             lcd_home();
-        //             lcd_puts("INOP");
-        //             _delay_ms(3000);
-        //             Show(current_menu,pointer,current_menu_size);
-        //             break;
-        //         case back:
-        //             current_menu = _main_menu;
-        //             current_menu_size = main_menu_size;
-        //             Show(current_menu, pointer,current_menu_size);
-        //         default:
-        //             break;
-        //         }
-        // }   
+            
     }
 }

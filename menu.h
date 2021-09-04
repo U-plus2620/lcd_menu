@@ -19,11 +19,11 @@
     }item;
     
 item *Menu_maker(char *buffer[],int *action,int size, item *target);
-char *_Item(item _menu[], int pointer);
-void Show(item _menu[], int Pointer, int menu_size);
-int Scroll(int up, int down, int Pointer);
-int Select(item _menu[], int Pointer, int menu_size);
-int Wrap(item _menu,int Pointer);
+char *_Item(volatile item _menu[], volatile uint8_t pointer);
+void Show(volatile item _menu[], volatile uint8_t Pointer,volatile int menu_size);
+int Scroll(int up, int down, volatile uint8_t Pointer);
+int Select(volatile item _menu[], volatile uint8_t Pointer, volatile uint8_t menu_size);
+int Wrap(item _menu,uint8_t Pointer);
 
 #endif
 
