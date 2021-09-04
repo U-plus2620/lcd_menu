@@ -26,28 +26,22 @@ volatile int current_menu_size;
 enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
 
 // Various menus in the form of lists
-    char *main_menu[] = {"milk sink","meat sink","RGB's(INOP)"};
-    int main_menu_size;// = sizeof(main_menu) / sizeof(main_menu[0]);
-    // item menuBuff[main_menu_size];
-    int main_menu_actions[] = {0,1,2};
-    item *_main_menu;// = Menu_maker(main_menu,main_menu_actions,main_menu_size,menuBuff);
+char *main_menu[] = {"milk sink","meat sink","RGB's(INOP)"};
+int main_menu_size;
+int main_menu_actions[] = {0,1,2};
+item *_main_menu;
 
-    char *sink_menu[] = {"on","off","dim","back"};
-    int sink_size;// = sizeof(sink_menu) / sizeof(sink_menu[0]);
-    // item sinkBuff[sink_size];
-    int sink_actions[] = {3,4,5,10};
-    item *milky_sink_menu;// = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
-    item *meaty_sink_menu;// = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
+char *sink_menu[] = {"on","off","dim","back"};
+int sink_size;
+int sink_actions[] = {3,4,5,10};
+item *milky_sink_menu;
+item *meaty_sink_menu;
 
-    char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
-    int RGB_size;// = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
-    // item RGBBuff[RGB_size];
-    int RGB_actions[] = {3,4,5,6,7,8,9,10}; 
-    item *_RGB_menu;// = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
-    
-   
+char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
+int RGB_size;
+int RGB_actions[] = {3,4,5,6,7,8,9,10}; 
+item *_RGB_menu;
 
-   
 ISR (PCINT2_vect){
     if (DeBounce(PIND,UP)){ //Scroll up
             pointer = Scroll(1,0,pointer);
@@ -201,25 +195,19 @@ int main(void){ //Super loop
     TCCR0A  |= (1<<WGM00) | (1<<WGM01); //(1<<COM0B1) | (1<<COM0A1) |
     TCCR0B  |= (1<<CS00);
     
-    // // Various menus in the form of lists
-    // char *main_menu[] = {"milk sink","meat sink","RGB's(INOP)"};
-     main_menu_size = sizeof(main_menu) / sizeof(main_menu[0]);
-     item menuBuff[main_menu_size];
-    // int main_menu_actions[] = {0,1,2};
-    /*item **/_main_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size,menuBuff);
+    //initialization of global variables used for the menus
+    main_menu_size = sizeof(main_menu) / sizeof(main_menu[0]);
+    item menuBuff[main_menu_size];
+    _main_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size,menuBuff);
 
-    // char *sink_menu[] = {"on","off","dim","back"};
-     sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
-     item sinkBuff[sink_size];
-    // int sink_actions[] = {3,4,5,10};
-    /* item**/ milky_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
-    /* item**/ meaty_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
+    sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
+    item sinkBuff[sink_size]; 
+    milky_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
+    meaty_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
-    // char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
-     RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
-     item RGBBuff[RGB_size];
-    // int RGB_actions[] = {3,4,5,6,7,8,9,10}; 
-    /* item**/ _RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
+    RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
+    item RGBBuff[RGB_size];
+    _RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
     
     //Initialization of the screen and main program
     lcd_init(LCD_DISP_ON);
