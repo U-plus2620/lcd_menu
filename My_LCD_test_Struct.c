@@ -19,7 +19,7 @@ int DeBounce(int Pin_reg, int Pin){
     if(bit_is_clear(Pin_reg,Pin)) return 1;
     else return 0;
 }
-volatile uint8_t pointer = 0;
+static volatile uint8_t pointer = 0;
 volatile uint8_t dimmer  = 0;
 volatile item *current_menu;
 volatile int current_menu_size;
@@ -203,20 +203,20 @@ int main(void){ //Super loop
     
     // // Various menus in the form of lists
     // char *main_menu[] = {"milk sink","meat sink","RGB's(INOP)"};
-     int main_menu_size = sizeof(main_menu) / sizeof(main_menu[0]);
+     main_menu_size = sizeof(main_menu) / sizeof(main_menu[0]);
      item menuBuff[main_menu_size];
     // int main_menu_actions[] = {0,1,2};
     /*item **/_main_menu = Menu_maker(main_menu,main_menu_actions,main_menu_size,menuBuff);
 
     // char *sink_menu[] = {"on","off","dim","back"};
-     int sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
+     sink_size = sizeof(sink_menu) / sizeof(sink_menu[0]);
      item sinkBuff[sink_size];
     // int sink_actions[] = {3,4,5,10};
     /* item**/ milky_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
     /* item**/ meaty_sink_menu = Menu_maker(sink_menu,sink_actions,sink_size,sinkBuff);
 
     // char *RGB_menu[] = {"on","off","dim","red","grn","blu","wht","back"};
-     int RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
+     RGB_size = sizeof(RGB_menu) / sizeof(RGB_menu[0]);
      item RGBBuff[RGB_size];
     // int RGB_actions[] = {3,4,5,6,7,8,9,10}; 
     /* item**/ _RGB_menu = Menu_maker(RGB_menu,RGB_actions,RGB_size,RGBBuff);
