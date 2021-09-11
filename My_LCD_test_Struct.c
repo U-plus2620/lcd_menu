@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <avr/io.h>
-//#include <avr/pgmspace.h>
 #include <util/delay.h>
 #include "lcd.h"
 #include "menu.h"
@@ -19,7 +18,12 @@ int DeBounce(int Pin_reg, int Pin){
     if(bit_is_clear(Pin_reg,Pin)) return 1;
     else return 0;
 }
+
+
 static volatile uint8_t pointer = 0;
+static volatile uint8_t pointer_holder = 0;
+static volatile item *menu_holder;
+static volatile int size_holder;
 volatile uint8_t dimmer  = 0;
 volatile item *current_menu;
 volatile int current_menu_size;
@@ -43,40 +47,49 @@ int RGB_actions[] = {3,4,5,6,7,8,9,10};
 item *_RGB_menu;
 
 ISR (PCINT2_vect){
-    if (DeBounce(PIND,UP)){ //Scroll up
+    if (bit_is_clear(PIND,UP)){ //Scroll up  
             pointer = Scroll(1,0,pointer);
             Show(current_menu,pointer,current_menu_size);
-        }
-        else if (DeBounce(PIND,DOWN)){ //Scroll down
+            }
+    else if (bit_is_clear(PIND,DOWN)){ //Scroll down  
             pointer = Scroll(0,1,pointer);
             Show(current_menu,pointer,current_menu_size);
         }
-        else if (DeBounce(PIND,SELECT)){ //Select item
+    else if (DeBounce(PIND,SELECT)){ //Select item
             selection = Select(current_menu,pointer,current_menu_size);
             switch(selection){
                 case milk:
                     lcd_clrscr();
                     lcd_home();
                     _delay_ms(100);
+                    pointer_holder = pointer;
+                    menu_holder = current_menu;
+                    size_holder = current_menu_size;
                     current_menu = milky_sink_menu;
                     current_menu_size = sink_size;
-                    Show(current_menu, pointer,current_menu_size);
+                    Show(current_menu, 0,current_menu_size);
                     break;
                 case meat:
                     lcd_clrscr();
                     lcd_home();
                     _delay_ms(100);
+                    pointer_holder = pointer;
+                    menu_holder = current_menu;
+                    size_holder = current_menu_size;
                     current_menu = meaty_sink_menu;
                     current_menu_size = sink_size;
-                    Show(current_menu, pointer,current_menu_size);
+                    Show(current_menu, 0,current_menu_size);
                     break;
                 case RGB:
                     lcd_clrscr();
                     lcd_home();
                     _delay_ms(100);
+                    pointer_holder = pointer;
+                    menu_holder = current_menu;
+                    size_holder = current_menu_size;
                     current_menu = _RGB_menu;
                     current_menu_size = RGB_size;
-                    Show(current_menu, pointer,current_menu_size);
+                    Show(current_menu, 0,current_menu_size);
                     break;
                 case on:
                     if(current_menu == milky_sink_menu){
@@ -145,6 +158,9 @@ ISR (PCINT2_vect){
                     lcd_home();
                     lcd_puts("INOP");
                     _delay_ms(100);
+                    pointer_holder = pointer;
+                    menu_holder = current_menu;
+                    size_holder = current_menu_size;
                     Show(current_menu,pointer,current_menu_size);
                     break;
                 case green:
@@ -169,30 +185,31 @@ ISR (PCINT2_vect){
                     Show(current_menu,pointer,current_menu_size);
                     break;
                 case back:
-                    current_menu = _main_menu;
-                    current_menu_size = main_menu_size;
+                    current_menu = menu_holder;
+                    current_menu_size = size_holder;
+                    pointer = pointer_holder;
                     Show(current_menu, pointer,current_menu_size);
                 default:
                     break;
                 }
         }   
-
 }
+
 int main(void){ //Super loop
     
     //Pin configurations
-    DDRD  &= ~(1 << UP) | ~(1<<DOWN) | ~(1<<SELECT);        /* Pin PD2 input              */
-    PORTD |=  (1 << UP);          /* Pin PD2 pull-up enabled    */
-    PORTD |=  (1 << DOWN);          /* Pin PD3 pull-up enabled    */
-    PORTD |=  (1 << SELECT);          /* Pin PD4 pull-up enabled    */
-    DDRD  |=  (1<<MILK) | (1<<MEAT); /*output pin*/   
-    PORTD &= ~(1<<MILK) | ~(1<<MEAT); /*output pin*/
+    DDRD  &= ~(1 << UP) | ~(1<<DOWN) | ~(1<<SELECT);        /* Pin PD2 input*/
+    PORTD |=  (1 << UP);                                    /* Pin PD2 pull-up enabled    */
+    PORTD |=  (1 << DOWN);                                  /* Pin PD3 pull-up enabled    */
+    PORTD |=  (1 << SELECT);                                /* Pin PD4 pull-up enabled    */
+    DDRD  |=  (1<<MILK) | (1<<MEAT);                        /*output pin*/   
+    PORTD &= ~(1<<MILK) | ~(1<<MEAT);                       /*output pin*/
     
-    PCICR |= (1<<PCIE2);
+    PCICR  |= (1<<PCIE2);
     PCMSK2 |= (1<<PCINT18) | (1<<PCINT19) | (1<<PCINT20);
 
     //Initialize timer for dimming
-    TCCR0A  |= (1<<WGM00) | (1<<WGM01); //(1<<COM0B1) | (1<<COM0A1) |
+    TCCR0A  |= (1<<WGM00) | (1<<WGM01);
     TCCR0B  |= (1<<CS00);
     
     //initialization of global variables used for the menus
