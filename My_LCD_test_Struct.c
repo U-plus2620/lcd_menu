@@ -47,11 +47,11 @@ int RGB_actions[] = {3,4,5,6,7,8,9,10};
 item *_RGB_menu;
 
 ISR (PCINT2_vect){
-    if (bit_is_clear(PIND,UP)){ //Scroll up  
+    if (DeBounce(PIND,UP)){ //Scroll up  
             pointer = Scroll(1,0,pointer);
             Show(current_menu,pointer,current_menu_size);
             }
-    else if (bit_is_clear(PIND,DOWN)){ //Scroll down  
+    else if (DeBounce(PIND,DOWN)){ //Scroll down  
             pointer = Scroll(0,1,pointer);
             Show(current_menu,pointer,current_menu_size);
         }
