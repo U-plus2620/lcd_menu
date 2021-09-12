@@ -24,7 +24,7 @@ static volatile uint8_t pointer = 0;
 static volatile uint8_t pointer_holder = 0;
 static volatile item *menu_holder;
 static volatile int size_holder;
-volatile uint8_t dimmer  = 0;
+volatile uint8_t dimmer  = 255;
 volatile item *current_menu;
 volatile int current_menu_size;
 enum selection{milk,meat,RGB,on,off,dim,red,green,blue,white,back}selection;
@@ -47,15 +47,15 @@ int RGB_actions[] = {3,4,5,6,7,8,9,10};
 item *_RGB_menu;
 
 ISR (PCINT2_vect){
-    if (DeBounce(PIND,UP)){ //Scroll up  
+    if (bit_is_clear(PIND,UP)){ //Scroll up  
             pointer = Scroll(1,0,pointer);
             Show(current_menu,pointer,current_menu_size);
             }
-    else if (DeBounce(PIND,DOWN)){ //Scroll down  
+    else if (bit_is_clear(PIND,DOWN)){ //Scroll down  
             pointer = Scroll(0,1,pointer);
             Show(current_menu,pointer,current_menu_size);
         }
-    else if (DeBounce(PIND,SELECT)){ //Select item
+    else if (bit_is_clear(PIND,SELECT)){ //Select item
             selection = Select(current_menu,pointer,current_menu_size);
             switch(selection){
                 case milk:
@@ -65,9 +65,10 @@ ISR (PCINT2_vect){
                     pointer_holder = pointer;
                     menu_holder = current_menu;
                     size_holder = current_menu_size;
+                    pointer = 0;
                     current_menu = milky_sink_menu;
                     current_menu_size = sink_size;
-                    Show(current_menu, 0,current_menu_size);
+                    Show(current_menu, pointer ,current_menu_size);
                     break;
                 case meat:
                     lcd_clrscr();
@@ -76,9 +77,10 @@ ISR (PCINT2_vect){
                     pointer_holder = pointer;
                     menu_holder = current_menu;
                     size_holder = current_menu_size;
+                    pointer = 0;
                     current_menu = meaty_sink_menu;
                     current_menu_size = sink_size;
-                    Show(current_menu, 0,current_menu_size);
+                    Show(current_menu, pointer ,current_menu_size);
                     break;
                 case RGB:
                     lcd_clrscr();
@@ -87,9 +89,10 @@ ISR (PCINT2_vect){
                     pointer_holder = pointer;
                     menu_holder = current_menu;
                     size_holder = current_menu_size;
+                    pointer = 0;
                     current_menu = _RGB_menu;
                     current_menu_size = RGB_size;
-                    Show(current_menu, 0,current_menu_size);
+                    Show(current_menu, pointer ,current_menu_size);
                     break;
                 case on:
                     if(current_menu == milky_sink_menu){
@@ -118,9 +121,10 @@ ISR (PCINT2_vect){
                     // }
                     break;
                 case dim:
+                        _delay_ms(150); //the button seemed to be bounceing and leaving the do{}while loop, this delay helps
                         lcd_clrscr();
                         char intbuff[10];
-                        itoa((dimmer/(float)0)*100,intbuff,10);
+                        itoa((dimmer/(float)255)*100,intbuff,10);
                         lcd_puts("DIM\n");
                         lcd_puts(intbuff);
                         lcd_putc('%');
@@ -157,7 +161,7 @@ ISR (PCINT2_vect){
                     lcd_clrscr();
                     lcd_home();
                     lcd_puts("INOP");
-                    _delay_ms(100);
+                    _delay_ms(3000);
                     pointer_holder = pointer;
                     menu_holder = current_menu;
                     size_holder = current_menu_size;
