@@ -292,17 +292,6 @@ int main(void){ //Super loop
                             pointer = pointer_holder;
                             Show(current_menu, pointer,current_menu_size);
                             break;
-                        // case sleep:
-                        //     cli();
-                        //     sleep_timer = 0;
-                        //     lcd_clrscr();
-                        //     lcd_puts("nighty night...");
-                        //     _delay_ms(200);
-                        //     lcd_command(LCD_DISP_OFF);
-                        //     sleep_enable();
-                        //     sei();
-                        //     sleep_cpu();
-                        //     break;
                         default:
                             break;
                         }
